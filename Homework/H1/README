@@ -1,0 +1,35 @@
+problema 1 - o ora si jumatate
+
+am construit o matrice, avand pe fiecare linie o pereche de cuvinte
+am facut un vector caracteristic in care am pus gradele perechilor
+am verificat daca cele 2 cuvinte de pe linie sunt anagrame
+le-am calculat gradul si le-am ordonat corespunzator
+
+problema 2 - 2 ore
+
+nu am construit matricea, insa am retinut pozitiile nebunilor
+pentru aceasta am folosit o matrice cu 2 coloane
+am gasit o formula pentru a afla daca 2 nebuni impart aceeasi diagonala
+am mutat "teoretic" nebunii pe fiecare pozitie din matrice
+mereu pe primele 2 linii din matrice am pus nebunii ce ne interesau
+astfel am putut sa fac cate un for fara prea multe verificari
+
+problema 3 - 5-6 ore
+
+am facut problema brute-force, cu cate o functie pentru fiecare rotatie
+am lucrat cu codurile culorilor, nu cu charuri
+codul este dat de ordinea in care am primit culoarea (0->5)
+culorile sunt puse intr-o matrice de caractere, fiecare pe o linie
+am considerat fiecare fata a cubului o matrice 3x3
+
+problema 4 - o ora si jumatate
+
+am facut cate o matrice pentru A, A^2, Atranspus, A*Atranspus
+fiecare matrice este compusa din int-uri, nu caractere
+am lucrat cu fiecare matrice in parte si i-am calculat scorul
+am utilizat funcii separate pentru punctaje pe linii, diagonale si coloane
+la final am facut o ierarhie pe baza conditiilor date si am afisat castigatorul
+
+
+
+

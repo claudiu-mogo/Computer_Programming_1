@@ -1,0 +1,143 @@
+Mogodeanu_Claudiu_311CC_tema_2
+
+!!!Important - am pus in Makefile si fisierul browser.c
+Am utilizat atat ncurses, cat si biblioteca de meniuri, cum a fost recomandat.
+Este trecuta regula de compilare si acolo, nefiind un argument la build:
+gcc -o browser browser.c -lncurses -lmenu, putand fi atasate flaguri: Wall, g.
+
+In caz ca nu se incarca bine pe vmchecker,
+pe masina locala am punctaj maxim si pass la memcheck pe toate taskurile.
+
+De asemenea, am impartit anteturile unor functii pt a nu depasi 80 caractere.
+
+Task 1 - 4 ore 
+
+Chiar daca se cerea afisarea doar a catorva elemente specifice din site-uri,
+am incarcat absolut toata baza de date intr-un struct (SITE):
+url, titlul, nr accesari, checksum, lungime, nume_fisier (de ex: site1.html)
+cod - absolut tot de la html la html inclusiv
+continut - continutul efectiv al siteului
+si cele 2 tipuri de culori din enumeratie
+
+Alocam memorie unui vector de site-uri, numit "site" si realocam din 3 in 3.
+Deschidem fisierul master, citim fiecare linie, iar dupa ce scapam de '\n'-ul
+aferent fiecarui rand, deschidem "html_de_citit", anume siteurile.
+De pe prima linie citim lungime, url, accesari, checksum, apoi citim "cod".
+Prin intermediul functiilor "titlul" si "continutul", impartim "cod"-ul.
+
+Functia "titlul" cauta secventele "<title>" si "</title>" si, cu ajutorul unui
+pointer, se plimba de la una la cealalta, alipind la titlu cate o litera.
+
+Functia "continutul" face cam acelasi lucru ca "titlul", doar ca intre p-uri.
+Exista 3 variante de header p: cu 0,1,2 culori. Pentru cazul in care exista
+cel putin o culoare, mutam pointerul imediat dupa prima ">" si incarcam litera
+cu litera.
+
+Alegem culorile cu ajutorul functiei "switch_culori". Vedem daca in tag exista
+c, b sau amandoua (color sau background),
+iar apoi ne facem viata mai usoara ca observam ca toate
+culorile au a 3a litera diferita (primele 2 litere nu mergeau, iar red avea
+doar 3 litere, daca nu mergea nici a 3a ne reprofilam. Observatie ++). 
+Incarcam la final in struct.
+Afisam datele cerute de anunt.
+
+Task 2 - 3 ore
+
+Folosim un vector de structuri de tip SITE, numit "site_cu_cuvinte",
+in care punem toate site-urile ce contin cel putin unul din cuvintele bune.
+In "site" avem absolut toate structurile.
+Variabila "valid" din struct reprezinta capacitatea unui site de a fi
+pus in vectorul nou. valid=0 => a fost deja pus
+
+Dupa ce facem citirea din fisiere ca la task 1, folosim o functie
+"parsare_site_cuvinte" in care citim de la tastatura o linie, o impartim
+in cuvinte si verificam daca un site contine acel cuvant.
+
+Functia de "sortare" cuprinde un pointer catre o functie "comparare", in care
+ordonam dupa continut, respectiv accesari. Sortarea in sine reprezinta un 
+bubblesort cu conditia de comparare din antet.
+La final afisam url-urile siteurilor ordonate din "site_cu_cuvinte".
+
+Task 3 - 1-2 ore
+
+Task 3 este un task 2 reinterpretat. De data aceasta, variabila "valid"
+aferenta fiecarui site poate fi 0 si cand un site a fost deja pus sau cand
+contine cuvantul interzis.
+Strategia de lucru este de a invalida initial toate siteurile ce contin 
+acel cuvant cu "-", urmand sa ramanem doar cu cele cu potential.
+Verificam si daca "-" se afla in interiorul unui cuvant normal, thus
+neavand caracteristica de anulare. (Ex: Cluj-Napoca)
+Spre deosebire de task 2, se va face o cautare separata intre ghilimele,
+cuvintele fiind anexate litera cu litera in "cuvant", urmand a fi cautate
+siteurile bune si puse in "site_cu_cuvinte".
+
+In acest caz, functia "comparare" compara doar accesarile, iar 
+sortarea este tot bubblesort.
+La final, dupa "parsare_site_cuvinte" si sortare, se afiseaza url-urile
+siteurilor din "site_cu_cuvinte".
+ 
+Task 4 - 2 ore
+
+Strategia de lucru este de a lua fiecare url primit de la tastatura,
+urmand sa parcurgem fiecare site in master si sa vedem daca ii gasim un match.
+Am intrebat laboranta ce se intampla daca se inchide un fisier si se deschide,
+ajungand la concluzia ca cursorul se muta la inceput.
+Am folosit acest amanunt in cadrul taskului.
+In cazul in care nu s-a gasit niciun match pt url, am creat un cod artificial,
+vid, pe care l-am folosit drept punct de reper cand am afisat mesajele.
+
+Functia "cheie" calculeaza cheia gasita dupa formula din cerinta, 
+utilizandu-se de functiile rotl si rotr. Calculul are o caracteristica
+esentiala, fiind facut cu unsigned char. Am facut acest lucru in rotr si rotl.
+
+Functia "rotr" face 2 rezerve unsigned char ale literei, iar la final face
+un sau logic pe fiecare bit dintre cei 8 intre un 0, ramas dupa shiftare, si
+bit-ul bun mutat pe pozitia sa. "perioada principala" este 8, de unde k%8.
+Functia "rotl" are un comportament similar.
+
+Task 5 - o seara de documentatie si 3 seri de implementare
+
+Broswer-ul arata groaznic, dar functioneaza. La inceputul README-ului si
+in Makefile apare regula de compilare.
+Am folosit atat ncurses, cat si biblioteca de meniuri.
+Ar trebui sa functioneza toate caracteristicile, daca nu, recompilati sau
+puneti spatiu dupa cuvintele cautate.
+Este o biblioteca extrem de suspecta. Uneori dadea segfault, alteori nu dadea
+pe acelasi text introdus. Eu zic ca am rezolvat problemele totusi.
+
+Baza de date este compusa din structul de la task1.
+Functiile "continutul", "titlul", "switch_culori" au aceleasi atributii.
+Functiile "parsare_site_cuvinte"-simplu si avansat reprezinta echivalentele
+taskurilor 2 si 3, de data aceasta input-ul fiind "text_de_cautat", anume
+ce a scris utilizatorul in bara de cautare. Functiile returneaza
+lungimea lui "site_cu_cuvinte".
+
+Programul in sine incepe cu crearea unui nou screen si window, alegerea
+primei palete de culori si afisarea numelui prin functia "nume_motor".
+
+In permanenta in coltul dreapta-jos vor aparea comenzile posibile,
+fiind actualizate in functie de tastele apasate.
+
+Initial asteptam c sau q. Daca primim q, se iese din asteptare(while)
+si se face endwin. Daca primim c se lanseaza functia cautare.
+
+Functia "cautare" creeaza un new_win cu o bara de cautare pe mijloc,
+cursor vizibil, iar utilizatorul introduce text pana cand se primeste enter.
+Textul introdus se salveaza in "text_de_cautat".
+Dupa primirea tastei enter asteptam primirea s a sau q.
+Daca primim q se inchide fereastra. Daca primim s si a se va lansa functia
+generala "parsare_completa", cu o "decizie" 0 sau 1. Daca dupa aceea se va 
+dori reintoarcerea la cautare, variabila recusiv va permite acest lucru.
+
+Functia "parsare_completa" (aka main-ul din celelalte functii) are rolul
+de a accesa toate siteurile disponibile si, in functie de "decizie",
+lanseaza cautarea avansata sau simpla. La final creeaza un meniu.
+
+Functia "creare_meniu" genereaza o noua fereastra, cu o subfereastra
+pentru meniu. Itemele sunt siteurile bune.
+Utilizatorul poate alege oricare dintre siteuri, iar
+cand se primeste tasta enter se declanseaza functia "enter".
+Aceasta initializeaza alta fereastra si creeaza o noua paleta de culori in
+functie de culorile din html-ul siteului ales.
+La final se afiseaza continutul siteului si titlul boldat pe mijloc.
+Singura optinue de acum este b back, iar actiunile pot fi repetate.
